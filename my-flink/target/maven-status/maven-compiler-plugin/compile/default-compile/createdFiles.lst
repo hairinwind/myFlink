@@ -1,0 +1,6 @@
+my/flink/WordCount$LineSplitter.class
+my/flink/StreamingJob.class
+my/flink/SocketTextStreamWordCount.class
+my/flink/WordCount.class
+my/flink/BatchJob.class
+my/flink/SocketTextStreamWordCount$LineSplitter.class
