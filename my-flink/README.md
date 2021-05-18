@@ -43,6 +43,19 @@ You shall see the count result.
 
 You can also check the job status from flink dashboard http://localhost:8081/
 
+To stop the flink job, you need find the job id from the web UI, or from ```bin/flink list```
+```
+bin/flink stop --savepointPath /home/yao/myworkspace/flink-data <JOB_ID>
+```
+
+To start a job from a Savepoint
+```
+bin/flink run --detached --fromSavepoint /home/yao/myworkspace/flink-data/savepoint-99c29f-8eb6b230e77d \
+       -c my.flink.SocketTextStreamWordCount ~/myworkspace/myFlink/my-flink/target/my-flink-1.0-SNAPSHOT.jar localhost 9000 
+```
+
+more CLI options: https://ci.apache.org/projects/flink/flink-docs-master/docs/deployment/cli/
+
 ## run it on kubernetes
 ### set docker repo to minikube
 I already have minikube installed on my local. Run this to ensure the docker is pushing the image to the minikube docker repo
