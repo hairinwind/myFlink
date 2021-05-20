@@ -11,6 +11,11 @@ bin/kafka-topics.sh --zookeeper localhost:2181 \
   --create --replication-factor 1 --partitions 1 \
   --topic test002
 ```
+```
+bin/kafka-topics.sh --zookeeper localhost:2181 \
+  --create --replication-factor 1 --partitions 1 \
+  --topic alpha-bank-transactions-backup
+```
 
 ## start flink
 If flink is not running, run ``` bin/start-cluster.sh ```to start it  

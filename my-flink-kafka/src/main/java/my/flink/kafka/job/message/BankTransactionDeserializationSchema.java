@@ -11,7 +11,7 @@ public class BankTransactionDeserializationSchema implements DeserializationSche
 
     private static final long serialVersionUID = 1L;
     private static final ObjectMapper objectMapper = JsonMapper.builder()
-            .findAndAddModules()
+            .findAndAddModules() /* find the JavaTimeModule to handle the Instant in BankTransaction */
             .build();
 
     @Override
