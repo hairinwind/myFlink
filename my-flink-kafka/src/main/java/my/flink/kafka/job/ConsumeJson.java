@@ -4,12 +4,14 @@ import my.flink.kafka.job.message.BankTransaction;
 import my.flink.kafka.job.message.BankTransactionDeserializationSchema;
 import my.flink.kafka.job.message.BankTransactionSerializationSchema;
 import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.datastream.DataStreamUtils;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
 import java.util.Properties;
 
 import static my.flink.kafka.job.Constants.BOOTSTRAP_SERVERS;
@@ -41,9 +43,14 @@ public class ConsumeJson {
         stream.addSink(backupProducer);
 
         //.print() is to output to the console, check the log by 'tail -f log/flink-*-taskexecutor-*.out'
-        stream.map(record -> String.format("bankTransaction: send %s from %s to %s",
-                record.getAmount(), record.getFromAccount(), record.getToAccount()))
-                .print();
+//        stream.map(record -> String.format("bankTransaction: send %s from %s to %s and status is %s",
+//                record.getAmount(), record.getFromAccount(), record.getToAccount(), record.getStatus()))
+//                .print();
+
+        // flink provided a sink to collect DataStream results for testing and debugging purposes
+        Iterator<BankTransaction> collect = DataStreamUtils.collect(stream);
+        collect.forEachRemaining(record -> System.out.println("test output: " + record));
+
         streamEnv.execute("mytest to consume json messages");
     }
 }
