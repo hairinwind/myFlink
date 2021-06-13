@@ -28,6 +28,7 @@ ${project.build.directory}/
 .settings/
 .classpath
 .project
+target/
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
@@ -35,4 +36,6 @@ hs_err_pid*
 
 .factorypath
 
-target/
+flink-queryable_state_demo
+flink-training
+my-flink-1-13
