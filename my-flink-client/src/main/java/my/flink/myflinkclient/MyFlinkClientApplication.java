@@ -69,4 +69,36 @@ public class MyFlinkClientApplication {
 
 	}
 
+	@GetMapping("/balance/{jobId}")
+	public Double getBalanceState(@PathVariable String jobId, @RequestParam String account) throws IOException, ExecutionException, InterruptedException {
+		return getQueryableBalanceState(account, jobId);
+	}
+
+	public Double getQueryableBalanceState(String key, String jobIdParam) throws IOException, InterruptedException, ExecutionException {
+		JobID jobId = JobID.fromHexString(jobIdParam);
+		String proxyHost = "localhost";
+		int proxyPort = 9069;
+		QueryableStateClient client = new QueryableStateClient(proxyHost, proxyPort);
+
+		ValueStateDescriptor<Double> stateDescriptor =
+				new ValueStateDescriptor<>(
+						"",
+						TypeInformation.of(new TypeHint<Double>() {}));
+
+		CompletableFuture<ValueState<Double>> completableFuture =
+				client.getKvState(
+						jobId,
+						"balance",
+						key,
+						BasicTypeInfo.STRING_TYPE_INFO,
+						stateDescriptor);
+
+		while(!completableFuture.isDone()) {
+			Thread.sleep(100);
+		}
+
+		return completableFuture.get().value();
+
+	}
+
 }

@@ -73,7 +73,7 @@ under the License.
 			<version>${flink.version}</version>
 			<scope>provided</scope>
 		</dependency>
-
+		<!-- below is needed for queryable state -->
 		<dependency>
 			<groupId>org.apache.flink</groupId>
 			<artifactId>flink-queryable-state-runtime_${scala.binary.version}</artifactId>

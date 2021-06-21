@@ -70,21 +70,10 @@ docker build -t my-flink .
 ```
 After it is done, run ```docker image ls |grep flink``` and you can see the image there. 
 
-## start flink application cluster
-./bin/flink run-application \
-    --detached \
-    --parallelism 4 \
-    --target kubernetes-application \
-    -Dkubernetes.cluster-id=k8s-ha-app-1 \
-    -Dkubernetes.container.image=my-flink \
-    -Dkubernetes.jobmanager.cpu=0.5 \
-    -Dkubernetes.taskmanager.cpu=0.5 \
-    -Dtaskmanager.numberOfTaskSlots=4 \
-    -Dkubernetes.rest-service.exposed.type=NodePort \
-    -Dhigh-availability=org.apache.flink.kubernetes.highavailability.KubernetesHaServicesFactory \
-    -Dhigh-availability.storageDir=s3://flink-bucket/flink-ha \
-    -Drestart-strategy=fixed-delay \
-    -Drestart-strategy.fixed-delay.attempts=10 \
-    -Dcontainerized.master.env.ENABLE_BUILT_IN_PLUGINS=flink-s3-fs-hadoop-1.12.1.jar \
-    -Dcontainerized.taskmanager.env.ENABLE_BUILT_IN_PLUGINS=flink-s3-fs-hadoop-1.12.1.jar \
-    local:///opt/flink/usrlib/my-flink-1.0-SNAPSHOT.jar
+## support queryable state
+add jars in pom.xml  
+after restart the job, you shall see the text below
+```
+- Started Queryable State Server @ /127.0.0.1:9067.
+- Started Queryable State Proxy Server @ /127.0.0.1:9069.
+```
