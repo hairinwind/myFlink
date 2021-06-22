@@ -1,5 +1,5 @@
 ## Add Maven dependency
-```
+```xml
 <dependency>
     <groupId>org.apache.flink</groupId>
     <artifactId>flink-queryable-state-runtime_${scala.binary.version}</artifactId>
@@ -13,7 +13,7 @@
 ```
 
 ## Enable queryable in env configuration
-```
+```java
 Configuration config = new Configuration();
 config.setBoolean(QueryableStateOptions.ENABLE_QUERYABLE_STATE_PROXY_SERVER, true);
 return StreamExecutionEnvironment.getExecutionEnvironment(config);
