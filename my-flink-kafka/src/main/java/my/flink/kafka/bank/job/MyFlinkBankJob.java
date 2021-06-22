@@ -44,6 +44,7 @@ public class MyFlinkBankJob {
         env.execute("my flink bank balance");
     }
 
+    // ##ENABLE_QUERYABLE_STATE_PROXY_SERVER
     private static StreamExecutionEnvironment getStreamEnv() {
         Configuration config = new Configuration();
         config.setBoolean(QueryableStateOptions.ENABLE_QUERYABLE_STATE_PROXY_SERVER, true);

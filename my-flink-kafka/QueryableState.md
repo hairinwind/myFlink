@@ -18,4 +18,4 @@ Configuration config = new Configuration();
 config.setBoolean(QueryableStateOptions.ENABLE_QUERYABLE_STATE_PROXY_SERVER, true);
 return StreamExecutionEnvironment.getExecutionEnvironment(config);
 ```
-see [MyFlinkBankJob.java](src/main/java/my/flink/kafka/bank/job/MyFlinkBankJob.java)
+see [MyFlinkBankJob.java](src/main/java/my/flink/kafka/bank/job/MyFlinkBankJob.java#ENABLE_QUERYABLE_STATE_PROXY_SERVER)
