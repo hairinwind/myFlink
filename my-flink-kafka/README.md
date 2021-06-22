@@ -30,6 +30,8 @@ run this command
 bin/flink run -c my.flink.kafka.job.WordUppercaseSink ~/myworkspace/myFlink/my-flink-kafka/target/my-flink-kafka-1.0-SNAPSHOT.jar
 ```
 
+## Queryable State
+[queryable state](QueryableState.md)
 
 
 
