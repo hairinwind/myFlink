@@ -96,3 +96,11 @@ while(!completableFuture.isDone()) {
 
 return completableFuture.get().value();
 ```
+
+## to run it
+- start the minikube (kafka)
+- start MyKafkaBankProducerApplication, this is the producer to send bankTransaction message to kafka
+- start MyFlinkBankJob and get the jobId
+- start MyFlinkClientAppliation
+- send a bankTransaction, e.g. curl -d 'fromAccount=100001&toAccount=100002&amount=1' localhost:9001/send
+- send query request e.g. curl localhost:9090/balance/372313dd5e0ed306133942669e30773b?account=100002, it shall return 1.

@@ -44,10 +44,10 @@ public class MyFlinkBankJob {
         env.execute("my flink bank balance");
     }
 
-    // ##ENABLE_QUERYABLE_STATE_PROXY_SERVER
     private static StreamExecutionEnvironment getStreamEnv() {
         Configuration config = new Configuration();
         config.setBoolean(QueryableStateOptions.ENABLE_QUERYABLE_STATE_PROXY_SERVER, true);
+//        config.setString(QueryableStateOptions.SERVER_PORT_RANGE, "19069");
         return StreamExecutionEnvironment.getExecutionEnvironment(config);
     }
 
