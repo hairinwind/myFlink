@@ -51,8 +51,13 @@ import org.apache.flink.util.Collector;
  * <li>write a simple Flink program
  * <li>write and use user-defined functions
  * </ul>
- * 
- * @see <a href="www.openbsd.org/cgi-bin/man.cgi?query=nc">netcat</a>
+ *
+ *
+ * To test it,
+ * run this class, then type "a" on nc console a couple of times
+ * the jobId is output on the console
+ * run MyFlinkClientApplication
+ * curl localhost:9090/state/239479c9380a0871f9914802e0f7feb8?key=a
  */
 public class TextStreamWordCountQueryableJob {
 

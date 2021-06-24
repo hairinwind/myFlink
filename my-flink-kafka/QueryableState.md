@@ -99,7 +99,7 @@ return completableFuture.get().value();
 
 ## to run it
 - start the minikube (kafka)
-- start MyKafkaBankProducerApplication, this is the producer to send bankTransaction message to kafka
+- start [MyKafkaBankProducerApplication](https://github.com/hairinwind/myKafka/blob/main/my-kafka-bank-producer/src/main/java/my/kafka/bank/MyKafkaBankProducerApplication.java), this is the producer to send bankTransaction message to kafka
 - start MyFlinkBankJob and get the jobId
 - start MyFlinkClientAppliation
 - send a bankTransaction, e.g. curl -d 'fromAccount=100001&toAccount=100002&amount=1' localhost:9001/send

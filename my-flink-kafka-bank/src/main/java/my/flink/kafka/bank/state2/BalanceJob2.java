@@ -1,4 +1,4 @@
-package my.flink.kafka.bank.state;
+package my.flink.kafka.bank.state2;
 
 import my.flink.kafka.job.message.BankTransaction;
 import my.flink.kafka.job.message.BankTransactionStatus;
@@ -14,7 +14,7 @@ import static my.flink.kafka.bank.state.Constants.TX_TOPIC;
 import static my.flink.kafka.util.FlinkUtil.getKafkaStream;
 import static my.flink.kafka.util.FlinkUtil.getQueryableStreamEnv;
 
-public class BalanceJob {
+public class BalanceJob2 {
 
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = getQueryableStreamEnv();
@@ -24,7 +24,7 @@ public class BalanceJob {
         FlinkKafkaProducer retryKafkaProducer = FlinkUtil.getKafkaProducer(TX_RETRY_TOPIC,
                 new JsonKafkaSerializationSchema<BankTransaction>(TX_RETRY_TOPIC));
         txStream.keyBy(new TxKeySelectorFunction())
-                .process(new BalanceProcessFunction())
+                .process(new BalanceProcessFunction2())
                 .addSink(retryKafkaProducer);  //to RETRY topic
 
         env.execute("transaction to balance");

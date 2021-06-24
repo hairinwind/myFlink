@@ -1,5 +1,6 @@
-package my.flink.kafka.bank.state;
+package my.flink.kafka.bank.state2;
 
+import my.flink.kafka.bank.state.TxWaitAndRetryFunction;
 import my.flink.kafka.job.message.BankTransaction;
 import my.flink.kafka.job.message.BankTransactionStatus;
 import my.flink.kafka.job.message.JsonKafkaSerializationSchema;
@@ -17,22 +18,13 @@ import static my.flink.kafka.bank.state.Constants.TX_RETRY_TOPIC;
 import static my.flink.kafka.bank.state.Constants.TX_TOPIC;
 import static my.flink.kafka.util.FlinkUtil.getKafkaStream;
 
-public class AfterDebitJob {
+public class AfterDebitJob2 {
 
     private static final OutputTag<BankTransaction> debitSuccessTransactions =
             new OutputTag<BankTransaction>("debitSuccessTransactions") {};
 
-    private static final OutputTag<BankTransaction> fulfilledTransactions =
-            new OutputTag<BankTransaction>("fulfilledTransactions") {};
-
-    private static final OutputTag<BankTransaction> balanceNotEnoughTransactions =
-            new OutputTag<BankTransaction>("balanceNotEnoughTransactions") {};
-
-    public static final OutputTag<BankTransaction> retryTransactions =
-            new OutputTag<BankTransaction>("retryTransactions") {};
-
-    public static final OutputTag<BankTransaction> cancelledTransactions =
-            new OutputTag<BankTransaction>("cancelledTransactions") {};
+    private static final OutputTag<BankTransaction> completedTransactions =
+            new OutputTag<BankTransaction>("completedTransactions") {};
 
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
@@ -47,17 +39,8 @@ public class AfterDebitJob {
                 .addSink(getBankTransactionKafkaProducer(TX_TOPIC));
 
         /* if it is FULFILLED, send to TX_FULFILLED */
-        splittedAfterDebitStream.getSideOutput(fulfilledTransactions)
+        splittedAfterDebitStream.getSideOutput(completedTransactions)
                 .keyBy(BankTransaction::getTxId)
-                .addSink(getBankTransactionKafkaProducer(TRANSACTION_RAW_COMPLETED));
-
-        /* if balance is not enough, wait and then send back to TX_TOPIC to retry */
-        SingleOutputStreamOperator<BankTransaction> afterWaitRetryStream = splittedAfterDebitStream.getSideOutput(balanceNotEnoughTransactions)
-                .keyBy(BankTransaction::getTxId)
-                .process(new TxWaitAndRetryFunction());
-        afterWaitRetryStream.getSideOutput(retryTransactions)
-                .addSink(getBankTransactionKafkaProducer(TX_TOPIC));
-        afterWaitRetryStream.getSideOutput(cancelledTransactions)
                 .addSink(getBankTransactionKafkaProducer(TRANSACTION_RAW_COMPLETED));
 
         env.execute("transaction to balance");
@@ -74,12 +57,8 @@ public class AfterDebitJob {
         public void processElement(BankTransaction bankTransaction, Context context, Collector<BankTransaction> collector) throws Exception {
             if (bankTransaction.getStatus() == BankTransactionStatus.DEBIT_SUCCESS) {
                 context.output(debitSuccessTransactions, bankTransaction);
-            }
-            if (bankTransaction.getStatus() == BankTransactionStatus.FULFILLED) {
-                context.output(fulfilledTransactions, bankTransaction);
-            }
-            if (bankTransaction.getStatus() == BankTransactionStatus.RETRY_BALANCE_NOT_ENOUGH) {
-                context.output(balanceNotEnoughTransactions, bankTransaction);
+            } else {
+                context.output(completedTransactions, bankTransaction);
             }
         }
     }

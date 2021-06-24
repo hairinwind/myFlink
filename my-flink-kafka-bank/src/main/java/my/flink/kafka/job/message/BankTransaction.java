@@ -12,6 +12,7 @@ public class BankTransaction {
     private Instant instant = Instant.now();
     private BankTransactionStatus status = BankTransactionStatus.CREATED;
     private int retriedTimes = 0;
+    private long maxWaitTime;
 
     public BankTransaction() {
     }
@@ -70,16 +71,22 @@ public class BankTransaction {
         this.retriedTimes = retriedTimes;
     }
 
+    public long getMaxWaitTime() {
+        return maxWaitTime;
+    }
+
+    public void setMaxWaitTime(long maxWaitTime) {
+        this.maxWaitTime = maxWaitTime;
+    }
+
     @Override
     public String toString() {
         return "BankTransaction{" +
-                "txId='" + txId + '\'' +
-                ", status=" + status +
-                ", fromAccount='" + fromAccount + '\'' +
-                ", toAccount='" + toAccount + '\'' +
-                ", amount=" + amount +
+                fromAccount + ":" + toAccount + ":" + amount + ":" + status +
+                ", retriedTimes=" + retriedTimes +
+                ", txId=" + txId +
                 ", instant=" + instant +
-                ", retiedTimes =" + retriedTimes +
+                ", maxWaitTime=" + maxWaitTime +
                 '}';
     }
 }
